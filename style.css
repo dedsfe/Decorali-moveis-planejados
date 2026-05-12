@@ -203,6 +203,218 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* ============================================
+   REVEAL ANIMATION (scroll-triggered)
+   ============================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.85s var(--ease-out),
+              transform 0.85s var(--ease-out);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================
+   SOBRE
+   ============================================ */
+.sobre {
+  background: var(--dark);
+  padding: clamp(80px, 14vh, 140px) clamp(24px, 8vw, 100px);
+  overflow: hidden;
+}
+
+.sobre__inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 56px;
+}
+
+/* ── Visual ── */
+.sobre__visual {
+  position: relative;
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 1s var(--ease-out) 0.1s,
+              transform 1s var(--ease-out) 0.1s;
+}
+
+.sobre__visual.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.sobre__figure {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background: #2a201a;
+}
+
+.sobre__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.7s var(--ease-out);
+}
+
+.sobre__figure:hover .sobre__img {
+  transform: scale(1.03);
+}
+
+/* Gold accent border (hidden on mobile) */
+.sobre__accent {
+  display: none;
+}
+
+/* ── Content ── */
+.sobre__content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.sobre__label {
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold);
+  display: block;
+  margin-bottom: 20px;
+}
+
+.sobre__title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  font-weight: 300;
+  line-height: 1.12;
+  color: var(--white);
+  margin-bottom: 28px;
+}
+
+.sobre__title em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.sobre__text {
+  font-family: var(--font-body);
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  font-weight: 300;
+  line-height: 1.85;
+  color: rgba(253, 250, 246, 0.65);
+  margin-bottom: 18px;
+}
+
+/* ── Stats ── */
+.sobre__stats {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(16px, 4vw, 36px);
+  width: 100%;
+  margin-top: 36px;
+  margin-bottom: 40px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(201, 169, 110, 0.18);
+}
+
+.sobre__stat {
+  flex: 1;
+  min-width: 0;
+}
+
+.sobre__stat-num {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 7vw, 2.8rem);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.sobre__stat-label {
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(253, 250, 246, 0.45);
+  line-height: 1.4;
+}
+
+.sobre__stat-sep {
+  width: 1px;
+  height: 44px;
+  background: rgba(201, 169, 110, 0.22);
+  align-self: center;
+  flex-shrink: 0;
+}
+
+/* ── CTA ── */
+.sobre__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--white);
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(201, 169, 110, 0.45);
+  transition: color 0.3s ease,
+              border-color 0.3s ease,
+              gap 0.35s var(--ease-out);
+}
+
+.sobre__cta:hover {
+  color: var(--gold);
+  border-color: var(--gold);
+  gap: 16px;
+}
+
+/* ============================================
+   DESKTOP LAYOUT (≥ 900px)
+   ============================================ */
+@media (min-width: 900px) {
+  .sobre__inner {
+    grid-template-columns: 1.05fr 1fr;
+    gap: 72px;
+    align-items: center;
+  }
+
+  .sobre__figure {
+    aspect-ratio: 3 / 4;
+  }
+
+  /* Gold accent — show on desktop only */
+  .sobre__accent {
+    display: block;
+    position: absolute;
+    bottom: -22px;
+    right: -22px;
+    width: 62%;
+    height: 62%;
+    border: 1px solid rgba(201, 169, 110, 0.28);
+    z-index: 0;
+    pointer-events: none;
+  }
+}
+
+/* ============================================
    WHATSAPP
    ============================================ */
 .whatsapp-btn {
@@ -232,5 +444,13 @@ a { text-decoration: none; color: inherit; }
 @media (max-width: 480px) {
   .hero__title {
     letter-spacing: -0.02em;
+  }
+
+  .sobre__stat-num {
+    font-size: 1.8rem;
+  }
+
+  .sobre__stat-label {
+    font-size: 0.62rem;
   }
 }

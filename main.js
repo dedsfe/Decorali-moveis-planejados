@@ -27,3 +27,56 @@ window.addEventListener('scroll', () => {
   if (!heroBgImg) return;
   heroBgImg.style.transform = `scale(1) translateY(${window.scrollY * 0.2}px)`;
 }, { passive: true });
+
+// ── Scroll reveal (IntersectionObserver) ──────
+const revealEls = document.querySelectorAll('.reveal, .sobre__visual');
+
+if (revealEls.length) {
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const delay = el.dataset.delay ? parseInt(el.dataset.delay) : 0;
+      setTimeout(() => el.classList.add('is-visible'), delay);
+      revealObs.unobserve(el);
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  revealEls.forEach(el => revealObs.observe(el));
+}
+
+// ── Counter animation ──────────────────────────
+function animateCount(el, target, duration) {
+  const start = performance.now();
+  const update = (time) => {
+    const progress = Math.min((time - start) / duration, 1);
+    // easeOutCubic
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.floor(eased * target);
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    } else {
+      el.textContent = target;
+    }
+  };
+  requestAnimationFrame(update);
+}
+
+const statsSection = document.querySelector('.sobre__stats');
+if (statsSection) {
+  let counted = false;
+  const countObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting || counted) return;
+      counted = true;
+      document.querySelectorAll('.count').forEach(el => {
+        const target = parseInt(el.dataset.target);
+        const duration = target >= 100 ? 1800 : 1400;
+        animateCount(el, target, duration);
+      });
+      countObs.unobserve(entry.target);
+    });
+  }, { threshold: 0.5 });
+
+  countObs.observe(statsSection);
+}
