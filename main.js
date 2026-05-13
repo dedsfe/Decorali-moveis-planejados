@@ -1,3 +1,34 @@
+// ── Menu overlay ──────────────────────────────
+const menuBtn     = document.getElementById('menuBtn');
+const menuOverlay = document.getElementById('menuOverlay');
+const menuClose   = document.getElementById('menuClose');
+const menuLinks   = document.querySelectorAll('[data-menu-link]');
+
+function openMenu() {
+  menuOverlay.classList.add('is-open');
+  menuOverlay.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+  menuClose.focus();
+}
+
+function closeMenu() {
+  menuOverlay.classList.remove('is-open');
+  menuOverlay.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+  menuBtn.focus();
+}
+
+menuBtn.addEventListener('click', openMenu);
+menuClose.addEventListener('click', closeMenu);
+
+// fecha ao clicar em qualquer link
+menuLinks.forEach(link => link.addEventListener('click', closeMenu));
+
+// fecha com ESC
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && menuOverlay.classList.contains('is-open')) closeMenu();
+});
+
 // ── Hero & Navbar entrance ────────────────────
 window.addEventListener('load', () => {
   setTimeout(() => {

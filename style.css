@@ -380,6 +380,85 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* ============================================
+   MENU OVERLAY
+   ============================================ */
+.menu-overlay {
+  position: fixed; inset: 0; z-index: 300;
+  background: rgba(18, 13, 10, 0.97);
+  display: flex; flex-direction: column;
+  align-items: flex-start; justify-content: center;
+  padding: clamp(60px, 10vw, 100px) clamp(28px, 8vw, 100px);
+  /* entrada/saída */
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.55s var(--ease-out);
+}
+.menu-overlay.is-open {
+  opacity: 1; pointer-events: all;
+}
+
+/* botão fechar */
+.menu-overlay__close {
+  position: absolute; top: clamp(24px, 4vw, 36px); right: clamp(24px, 5vw, 60px);
+  background: none; border: none; cursor: pointer; padding: 8px;
+  color: var(--white); opacity: 0.6;
+  transition: opacity 0.3s, transform 0.4s var(--ease-out);
+}
+.menu-overlay__close:hover { opacity: 1; transform: rotate(90deg); }
+
+/* nav links */
+.menu-overlay__nav {
+  display: flex; flex-direction: column; gap: clamp(4px, 1.5vh, 12px);
+}
+.menu-overlay__link {
+  display: flex; align-items: baseline; gap: 20px;
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 9vw, 7rem);
+  font-weight: 300; font-style: italic; line-height: 1.05;
+  color: var(--white);
+  opacity: 0; transform: translateY(22px);
+  transition: color 0.3s, opacity 0.55s var(--ease-out), transform 0.55s var(--ease-out);
+}
+.menu-overlay__link:hover { color: var(--gold); }
+.menu-overlay.is-open .menu-overlay__link:nth-child(1) { opacity: 1; transform: translateY(0); transition-delay: 0.08s; }
+.menu-overlay.is-open .menu-overlay__link:nth-child(2) { opacity: 1; transform: translateY(0); transition-delay: 0.14s; }
+.menu-overlay.is-open .menu-overlay__link:nth-child(3) { opacity: 1; transform: translateY(0); transition-delay: 0.20s; }
+.menu-overlay.is-open .menu-overlay__link:nth-child(4) { opacity: 1; transform: translateY(0); transition-delay: 0.26s; }
+
+/* número decorativo */
+.menu-overlay__num {
+  font-family: var(--font-display);
+  font-size: clamp(0.65rem, 1vw, 0.8rem);
+  font-style: italic; font-weight: 300;
+  letter-spacing: 0.1em;
+  color: rgba(201, 169, 110, 0.5);
+  align-self: center;
+  min-width: 24px;
+}
+
+/* link whatsapp rodapé do menu */
+.menu-overlay__whatsapp {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-top: clamp(36px, 6vh, 60px);
+  font-family: var(--font-body); font-size: 0.72rem; font-weight: 400;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: rgba(253, 250, 246, 0.5);
+  opacity: 0; transform: translateY(12px);
+  transition: color 0.3s, opacity 0.55s var(--ease-out) 0.32s, transform 0.55s var(--ease-out) 0.32s;
+}
+.menu-overlay__whatsapp:hover { color: var(--gold); }
+.menu-overlay.is-open .menu-overlay__whatsapp { opacity: 1; transform: translateY(0); }
+
+/* linha decorativa */
+.menu-overlay::before {
+  content: '';
+  position: absolute; top: 0; left: 0;
+  width: 2px; height: 0;
+  background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+  transition: height 0.7s var(--ease-out) 0.1s;
+}
+.menu-overlay.is-open::before { height: 100%; }
+
+/* ============================================
    WHATSAPP
    ============================================ */
 .whatsapp-btn {
