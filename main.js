@@ -51,14 +51,6 @@ window.addEventListener('scroll', () => {
   }
 }, { passive: true });
 
-// ── Parallax on hero bg ───────────────────────
-const heroBgImg = document.querySelector('.hero__bg-img');
-
-window.addEventListener('scroll', () => {
-  if (!heroBgImg) return;
-  heroBgImg.style.transform = `scale(1) translateY(${window.scrollY * 0.2}px)`;
-}, { passive: true });
-
 // ── Scroll reveal (IntersectionObserver) ──────
 const revealEls = document.querySelectorAll('.reveal, .sobre__visual');
 
@@ -92,6 +84,51 @@ function animateCount(el, target, duration) {
   };
   requestAnimationFrame(update);
 }
+
+// ── Ambiente lightbox ─────────────────────────
+const ambLightbox      = document.getElementById('ambLightbox');
+const ambLightboxImg   = document.getElementById('ambLightboxImg');
+const ambLightboxCat   = document.getElementById('ambLightboxCat');
+const ambLightboxName  = document.getElementById('ambLightboxName');
+const ambLightboxClose = document.getElementById('ambLightboxClose');
+const ambCards         = document.querySelectorAll('.amb__card');
+let ambLastFocus = null;
+
+function openLightbox(card) {
+  const img = card.querySelector('.amb__img');
+  if (!img) return;
+  ambLightboxImg.src = img.currentSrc || img.src;
+  ambLightboxImg.alt = img.alt;
+  ambLightboxCat.textContent  = card.querySelector('.amb__cat')?.textContent  || '';
+  ambLightboxName.textContent = card.querySelector('.amb__name')?.textContent || '';
+  ambLastFocus = card;
+  ambLightbox.classList.add('is-open');
+  ambLightbox.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+  ambLightboxClose.focus();
+}
+
+function closeLightbox() {
+  ambLightbox.classList.remove('is-open');
+  ambLightbox.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+  if (ambLastFocus) ambLastFocus.focus();
+}
+
+ambCards.forEach(card => {
+  card.addEventListener('click', e => {
+    e.preventDefault();
+    openLightbox(card);
+  });
+});
+
+ambLightboxClose.addEventListener('click', closeLightbox);
+ambLightbox.addEventListener('click', e => {
+  if (e.target === ambLightbox) closeLightbox();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && ambLightbox.classList.contains('is-open')) closeLightbox();
+});
 
 const statsSection = document.querySelector('.sobre__stats');
 if (statsSection) {

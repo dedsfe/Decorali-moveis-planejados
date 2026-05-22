@@ -241,6 +241,22 @@
     </div>
   </section>
 
+  <!-- AMBIENTE LIGHTBOX -->
+  <div class="amb-lightbox" id="ambLightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Visualização de ambiente">
+    <button class="amb-lightbox__close" id="ambLightboxClose" aria-label="Fechar visualização">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+        <path d="M17 5L5 17M5 5L17 17" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <figure class="amb-lightbox__figure">
+      <img class="amb-lightbox__img" id="ambLightboxImg" src="" alt="" />
+      <figcaption class="amb-lightbox__caption">
+        <span class="amb-lightbox__cat" id="ambLightboxCat"></span>
+        <span class="amb-lightbox__name" id="ambLightboxName"></span>
+      </figcaption>
+    </figure>
+  </div>
+
   <!-- WhatsApp -->
   <a href="https://wa.me/5500000000000" class="whatsapp-btn" id="whatsappBtn" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
     <svg width="28" height="28" viewBox="0 0 24 24" fill="white">

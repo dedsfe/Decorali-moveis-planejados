@@ -459,6 +459,58 @@ a { text-decoration: none; color: inherit; }
 .menu-overlay.is-open::before { height: 100%; }
 
 /* ============================================
+   AMBIENTE LIGHTBOX
+   ============================================ */
+.amb-lightbox {
+  position: fixed; inset: 0; z-index: 400;
+  display: flex; align-items: center; justify-content: center;
+  padding: clamp(56px, 9vw, 110px) clamp(24px, 8vw, 100px);
+  background: rgba(18, 13, 10, 0.82);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.5s var(--ease-out);
+}
+.amb-lightbox.is-open { opacity: 1; pointer-events: all; }
+
+.amb-lightbox__close {
+  position: absolute; top: clamp(24px, 4vw, 36px); right: clamp(24px, 5vw, 60px);
+  background: none; border: none; cursor: pointer; padding: 8px;
+  color: var(--white); opacity: 0.6;
+  transition: opacity 0.3s, transform 0.4s var(--ease-out);
+}
+.amb-lightbox__close:hover { opacity: 1; transform: rotate(90deg); }
+
+.amb-lightbox__figure {
+  position: relative; max-width: 1100px; width: 100%;
+  display: flex; flex-direction: column; align-items: flex-start;
+  opacity: 0; transform: scale(0.94);
+  transition: opacity 0.6s var(--ease-out) 0.05s, transform 0.6s var(--ease-out) 0.05s;
+}
+.amb-lightbox.is-open .amb-lightbox__figure { opacity: 1; transform: scale(1); }
+
+.amb-lightbox__img {
+  display: block; width: 100%; height: auto;
+  max-height: 76vh; object-fit: contain;
+}
+
+.amb-lightbox__caption {
+  display: flex; align-items: baseline; gap: 14px;
+  margin-top: 22px; padding-top: 18px;
+  border-top: 1px solid rgba(201, 169, 110, 0.22);
+  width: 100%;
+}
+.amb-lightbox__cat {
+  font-family: var(--font-display); font-size: 0.7rem; font-style: italic;
+  letter-spacing: 0.18em; color: rgba(201, 169, 110, 0.7);
+}
+.amb-lightbox__name {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 3vw, 1.7rem); font-weight: 300;
+  color: var(--white); line-height: 1;
+}
+
+/* ============================================
    WHATSAPP
    ============================================ */
 .whatsapp-btn {
