@@ -98,23 +98,62 @@ if (convite) {
   conviteObs.observe(convite);
 }
 
+// ── Ambientes — reveal por máscara ────────────
+const ambItems = [...document.querySelectorAll('.amb__item')];
+
+if (ambItems.length) {
+  const ambRevealObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const delay = parseInt(el.dataset.revealDelay) || 0;
+      setTimeout(() => el.classList.add('is-revealed'), delay);
+      ambRevealObs.unobserve(el);
+    });
+  }, { threshold: 0.18, rootMargin: '0px 0px -50px 0px' });
+
+  ambItems.forEach(el => ambRevealObs.observe(el));
+}
+
 // ── Ambiente lightbox ─────────────────────────
 const ambLightbox      = document.getElementById('ambLightbox');
 const ambLightboxImg   = document.getElementById('ambLightboxImg');
-const ambLightboxCat   = document.getElementById('ambLightboxCat');
-const ambLightboxName  = document.getElementById('ambLightboxName');
+const ambLbIndex       = document.getElementById('ambLbIndex');
+const ambLbName        = document.getElementById('ambLbName');
+const ambLbDesc        = document.getElementById('ambLbDesc');
+const ambLbCounter     = document.getElementById('ambLbCounter');
 const ambLightboxClose = document.getElementById('ambLightboxClose');
-const ambCards         = document.querySelectorAll('.amb__card');
+const ambPrev          = document.getElementById('ambPrev');
+const ambNext          = document.getElementById('ambNext');
+
+const ambData = ambItems.map(it => {
+  const img = it.querySelector('.amb__img');
+  return {
+    src: img.src,
+    alt: img.alt,
+    index: it.querySelector('.amb__index').textContent,
+    name: it.querySelector('.amb__name').textContent,
+    desc: it.dataset.desc || ''
+  };
+});
+
+let ambCurrent = 0;
 let ambLastFocus = null;
 
-function openLightbox(card) {
-  const img = card.querySelector('.amb__img');
-  if (!img) return;
-  ambLightboxImg.src = img.currentSrc || img.src;
-  ambLightboxImg.alt = img.alt;
-  ambLightboxCat.textContent  = card.querySelector('.amb__cat')?.textContent  || '';
-  ambLightboxName.textContent = card.querySelector('.amb__name')?.textContent || '';
-  ambLastFocus = card;
+function paintLightbox(i) {
+  ambCurrent = i;
+  const d = ambData[i];
+  ambLightboxImg.src = d.src;
+  ambLightboxImg.alt = d.alt;
+  ambLbIndex.textContent   = d.index;
+  ambLbName.textContent    = d.name;
+  ambLbDesc.textContent    = d.desc;
+  ambLbCounter.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(ambData.length).padStart(2, '0');
+}
+
+function openLightbox(i) {
+  paintLightbox(i);
+  ambLastFocus = ambItems[i];
   ambLightbox.classList.add('is-open');
   ambLightbox.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
@@ -128,19 +167,35 @@ function closeLightbox() {
   if (ambLastFocus) ambLastFocus.focus();
 }
 
-ambCards.forEach(card => {
-  card.addEventListener('click', e => {
-    e.preventDefault();
-    openLightbox(card);
-  });
+function stepLightbox(dir) {
+  const n = (ambCurrent + dir + ambData.length) % ambData.length;
+  ambLightboxImg.style.opacity = '0';
+  setTimeout(() => {
+    const d = ambData[n];
+    const pre = new Image();
+    pre.onload = () => {
+      paintLightbox(n);
+      ambLightboxImg.style.opacity = '1';
+    };
+    pre.src = d.src;
+  }, 220);
+}
+
+ambItems.forEach((it, i) => {
+  it.addEventListener('click', () => openLightbox(i));
 });
 
 ambLightboxClose.addEventListener('click', closeLightbox);
+ambPrev.addEventListener('click', () => stepLightbox(-1));
+ambNext.addEventListener('click', () => stepLightbox(1));
 ambLightbox.addEventListener('click', e => {
   if (e.target === ambLightbox) closeLightbox();
 });
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && ambLightbox.classList.contains('is-open')) closeLightbox();
+  if (!ambLightbox.classList.contains('is-open')) return;
+  if (e.key === 'Escape')     closeLightbox();
+  if (e.key === 'ArrowLeft')  stepLightbox(-1);
+  if (e.key === 'ArrowRight') stepLightbox(1);
 });
 
 const statsSection = document.querySelector('.sobre__stats');
