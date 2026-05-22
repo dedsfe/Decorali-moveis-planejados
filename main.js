@@ -85,6 +85,19 @@ function animateCount(el, target, duration) {
   requestAnimationFrame(update);
 }
 
+// ── Convite (orçamento) reveal ────────────────
+const convite = document.querySelector('.convite');
+if (convite) {
+  const conviteObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-visible');
+      conviteObs.unobserve(entry.target);
+    });
+  }, { threshold: 0.3 });
+  conviteObs.observe(convite);
+}
+
 // ── Ambiente lightbox ─────────────────────────
 const ambLightbox      = document.getElementById('ambLightbox');
 const ambLightboxImg   = document.getElementById('ambLightboxImg');
