@@ -136,7 +136,7 @@ a { text-decoration: none; color: inherit; }
   aspect-ratio: 4 / 3; background: #2a201a;
 }
 .sobre__img {
-  width: 100%; height: 100%; object-fit: cover; object-position: 75% center; display: block;
+  width: 100%; height: 100%; object-fit: cover; object-position: 90% center; display: block;
   transition: transform 0.7s var(--ease-out);
 }
 .sobre__figure:hover .sobre__img { transform: scale(1.03); }
